@@ -1,5 +1,6 @@
 // db/seed.js
 
+
 const {
     client,
     getAllUsers
