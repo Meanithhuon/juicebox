@@ -74,7 +74,11 @@ async function createPost({
   }
 }
 
-async function updatePost(id, fields = {}) {
+async function updatePost(id, fields = {
+  title,
+  content,
+  active
+}) {
   // build the set string
   const setString = Object.keys(fields).map(
     (key, index) => `"${ key }"=$${ index + 1 }`
@@ -117,7 +121,8 @@ async function getPostsByUser(userId) {
     const { rows } = await client.query(`
       SELECT * FROM posts
       WHERE "authorId"=${ userId };
-    `);
+    `)
+    ;
 
     return rows;
   } catch (error) {
