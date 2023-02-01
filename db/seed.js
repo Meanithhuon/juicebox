@@ -148,7 +148,9 @@ const {
    async function rebuildDB() {
     try {
       client.connect();
+      if (process.env.ENVIRONMENT === "DEV") {
       await dropTables();
+      }
       await createTables();
       await createInitialUsers();
       await createInitialPosts();
