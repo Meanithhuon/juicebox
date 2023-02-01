@@ -9,6 +9,18 @@ usersRouter.use((req, res, next) => {
   next(); // THIS IS DIFFERENT
 });
 
+usersRouter.get('/', async (req, res, next) => {
+  try {
+    const users = await getAllUsers();
+  
+    res.send({
+      users
+    });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
 usersRouter.post('/register', async (req, res, next) => {
   const { username, password, name, location } = req.body;
   try {
@@ -67,12 +79,6 @@ usersRouter.post('/login', async (req, res, next) => {
   }
 });
 
-// UPDATE
-usersRouter.get('/', async (req, res) => {
-  const users = await getAllUsers();
-  res.send({
-    users
-  });
-});
+
 
 module.exports = usersRouter;
