@@ -6,22 +6,16 @@ const { requireUser } = require('./utils');
 // Route for getting all posts
 postsRouter.get('/', async (req, res, next) => {
   try {
-    const allPosts = await getAllPosts();
-
+    const allPosts = await getAllPosts(); // call the getAllPosts function from the db
     const posts = allPosts.filter(post => {
-      // the post is active, doesn't matter who it belongs to
-      if (post.active) {
-        return true;
-      }
-    
-      // the post is not active, but it belogs to the current user
-      if (req.user && post.author.id === req.user.id) {
-        return true;
-      }
-    
-      // none of the above are true
-      return false;
+      return post.active || (req.user && post.author.id === req.user.id);
     });
+    // keep a post if it is either active, or if it belongs to the current user
+    res.send({ posts }); // Send the result as a json object with key 'posts' and the value of the array
+  } catch (error) {
+    next(error);
+  }
+});
 
 postsRouter.post('/', requireUser, async (req, res, next) => {
   const { title, content, tags = "" } = req.body;
